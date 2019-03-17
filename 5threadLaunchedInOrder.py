@@ -3,32 +3,22 @@ import time
 import os
 
 
-
-sharedVar=65
-#notepad
-#explorer
-#code (vscode)
-sem = threading.Semaphore(3)
-cv= threading.Condition()
 ev=threading.Event()
 ev.clear()
+evCodeEnd=threading.Event()
+
 
 def code():
-   
-    cv.acquire()
     global sharedVar
     print('code launch')
-    cv.notify_all()
-    cv.release()
+    evCodeEnd.set()
     
     
 def notepad():
-    cv.acquire()
-    cv.wait()
-    cv.acquire()
-    ev.set()
+    evCodeEnd.wait()
     print('notepad launch')
-    cv.release()
+    ev.set()
+    
 
 def explorer():
     ev.wait()

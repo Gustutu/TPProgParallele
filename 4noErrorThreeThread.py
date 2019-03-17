@@ -1,49 +1,36 @@
 import threading
 import time
-import os
-
-
 sharedVar=65
-#notepad
-#explorer
-#code (vscode)
-sem = threading.Semaphore(3)
-cv= threading.Condition()
 
-def code():
+sem = threading.Semaphore()
+
+def inc():
     sem.acquire()
     global sharedVar
-    os.system('code')
+    reg= sharedVar
+    time.sleep(0.2)
+    reg += 1
+    sharedVar=reg
     sem.release()
 
-def notepad():
-    cv.wait()
-    global sharedVar
-    os.system('notepad')
-    sem.release()
-
-
-def explorer():
-    cv.wait
+def dec():
     sem.acquire()
-    os.system('explorer')
+    global sharedVar
+    reg=sharedVar
+    time.sleep(0.2)
+    reg-=1
+    sharedVar=reg
     sem.release()
 
-codeThread = threading.Thread(None, code, None)
-notepadThread = threading.Thread(None, notepad, None)
-explorerThread=threading.Thread(None, explorer, None)
-#setTo2Thread=threading.Thread(None,setTo2,None)
+incThread = threading.Thread(None, inc, None)
+decThread = threading.Thread(None, dec, None)
+dec2Thread = threading.Thread(None, dec, None)
 
+incThread.start()
+decThread.start()
+dec2Thread.start()
 
+incThread.join()
+decThread.join()
 
-#setTo2Thread.start()
-codeThread.start()
-notepadThread.start()
-explorerThread.start()
-
-
-codeThread.join()
-notepadThread.join()
-explorerThread.join()
-
-print("end")
+print(sharedVar)
