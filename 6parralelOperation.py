@@ -12,7 +12,6 @@ evT4=threading.Event()
 
 
 def ab():
-   
     global results
     if(len(results))==2:
         evT4.wait()
@@ -21,7 +20,8 @@ def ab():
     results.append(3+4)
     print("T1 done")
     sem.release()
-    ev.set()
+    if(len(results)==2):
+        ev.set()
   
     
 def cd():
@@ -34,7 +34,8 @@ def cd():
     results.append(6-3)
     print("T2 done")
     sem.release()
-    ev.set()
+    if(len(results)==2):
+       ev.set()
     
     
 def ef():
@@ -46,7 +47,8 @@ def ef():
     results.append(1+1)
     print("T3 done")
     sem.release()
-    ev.set()
+    if(len(results)==2):
+       ev.set()
     
 def T4():
     ev.wait()
@@ -64,16 +66,17 @@ def T4():
     print(r)
 
 abThread = threading.Thread(None, ab, None)
+T4Thread=threading.Thread(None, T4, None)
 cdThread = threading.Thread(None, cd, None)
 efThread=threading.Thread(None, ef, None)
-T4Thread=threading.Thread(None, T4, None)
 
+
+T4Thread.start()
 cdThread.start()
 efThread.start()
 abThread.start()
 
 
-T4Thread.start()
 
 
 abThread.join()
