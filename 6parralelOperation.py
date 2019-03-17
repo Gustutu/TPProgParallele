@@ -20,7 +20,8 @@ def ab():
     results.append(3+4)
     print("T1 done")
     sem.release()
-    if(len(results)==2):
+    if(len(results)>=2):
+        print()
         ev.set()
   
     
@@ -34,7 +35,7 @@ def cd():
     results.append(6-3)
     print("T2 done")
     sem.release()
-    if(len(results)==2):
+    if(len(results)>=2):
        ev.set()
     
     
@@ -47,7 +48,7 @@ def ef():
     results.append(1+1)
     print("T3 done")
     sem.release()
-    if(len(results)==2):
+    if(len(results)>=2):
        ev.set()
     
 def T4():
@@ -70,10 +71,9 @@ T4Thread=threading.Thread(None, T4, None)
 cdThread = threading.Thread(None, cd, None)
 efThread=threading.Thread(None, ef, None)
 
-
-T4Thread.start()
 cdThread.start()
 efThread.start()
+T4Thread.start()
 abThread.start()
 
 
